@@ -1,222 +1,239 @@
-// ---------- TOGGLE NAVBAR -----------
-let navMenu = document.getElementById('nav-menu');
-let toggleBtn = document.getElementById('toggleBtn');
+const photographs = [
+  {
+    title: 'Golden Drift',
+    category: 'nature',
+    size: 'wide',
+    src: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80'
+  },
+  {
+    title: 'Still Water',
+    category: 'landscapes',
+    size: 'square',
+    src: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=900&q=80'
+  },
+  {
+    title: 'Portrait Light',
+    category: 'portraits',
+    size: 'tall',
+    src: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=80'
+  },
+  {
+    title: 'City Notes',
+    category: 'street',
+    size: 'square',
+    src: 'https://images.unsplash.com/photo-1521295121783-8a321d551ad2?auto=format&fit=crop&w=900&q=80'
+  },
+  {
+    title: 'Soft Echo',
+    category: 'creative',
+    size: 'tall',
+    src: 'https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=900&q=80'
+  },
+  {
+    title: 'Morning Grain',
+    category: 'nature',
+    size: 'square',
+    src: 'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=900&q=80'
+  },
+  {
+    title: 'Open Road',
+    category: 'landscapes',
+    size: 'wide',
+    src: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80'
+  },
+  {
+    title: 'Frames in Motion',
+    category: 'creative',
+    size: 'square',
+    src: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80'
+  },
+  {
+    title: 'Afterglow',
+    category: 'portraits',
+    size: 'square',
+    src: 'https://images.unsplash.com/photo-1521119989659-a83eee488004?auto=format&fit=crop&w=900&q=80'
+  }
+];
 
-function myMenuFunction() {
-    navMenu.classList.toggle('active');
-    if (navMenu.classList.contains('active')) {
-        toggleBtn.className = 'uil uil-multiply';
-    } else {
-        toggleBtn.className = 'uil uil-bars';
-    }
+const nav = document.getElementById('navMenu');
+const navToggle = document.getElementById('navToggle');
+const topbar = document.getElementById('header');
+const galleryGrid = document.getElementById('galleryGrid');
+const filterButtons = document.querySelectorAll('.filter-button');
+const lightbox = document.getElementById('lightbox');
+const lightboxImage = document.getElementById('lightboxImage');
+const lightboxCaption = document.getElementById('lightboxCaption');
+const lightboxClose = document.getElementById('lightboxClose');
+const lightboxPrev = document.getElementById('lightboxPrev');
+const lightboxNext = document.getElementById('lightboxNext');
+const yearNode = document.getElementById('year');
+
+let currentFilter = 'all';
+let visiblePhotos = [...photographs];
+let activeLightboxIndex = 0;
+
+if (yearNode) {
+  yearNode.textContent = new Date().getFullYear();
 }
 
-// Close menu when link is clicked
+function setHeaderState() {
+  if (window.scrollY > 20) {
+    topbar.classList.add('scrolled');
+  } else {
+    topbar.classList.remove('scrolled');
+  }
+}
+
+function toggleMenu() {
+  nav.classList.toggle('is-open');
+  const expanded = nav.classList.contains('is-open');
+  navToggle.setAttribute('aria-expanded', String(expanded));
+}
+
 function closeMenu() {
-    navMenu.classList.remove('active');
-    toggleBtn.className = 'uil uil-bars';
+  nav.classList.remove('is-open');
+  navToggle.setAttribute('aria-expanded', 'false');
 }
 
-let navLinks = document.querySelectorAll('.nav-link');
-navLinks.forEach(link => {
-    link.addEventListener('click', closeMenu);
+navToggle.addEventListener('click', toggleMenu);
+nav.querySelectorAll('.nav-link').forEach((link) => {
+  link.addEventListener('click', () => closeMenu());
 });
 
-// ---------- CHANGE HEADER ON SCROLL -----------
-window.addEventListener('scroll', headerShadow);
-window.addEventListener('load', headerShadow);
-
-function headerShadow() {
-    const navHeader = document.getElementById('header');
-    if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
-        navHeader.style.boxShadow = '0 4px 10px #000000BB';
-        navHeader.style.height = '70px';
-        navHeader.style.lineHeight = '70px';
-        navHeader.style.background = '#00000078';
-        navHeader.style.backdropFilter = 'blur(8px)';
-        navHeader.style.webkitBackdropFilter = 'blur(8px)';
-    } else {
-        navHeader.style.boxShadow = 'none';
-        navHeader.style.height = '90px';
-        navHeader.style.lineHeight = '90px';
-        navHeader.style.background = 'rgba(0, 0, 0, 0.8)';
-        navHeader.style.backdropFilter = 'blur(10px)';
-        navHeader.style.webkitBackdropFilter = 'blur(10px)';
-    }
+function getVisiblePhotos() {
+  return currentFilter === 'all'
+    ? photographs
+    : photographs.filter((photo) => photo.category === currentFilter);
 }
 
-// ---------- SCROLL REVEAL ANIMATIONS -----------
-const sr = ScrollReveal({
-    origin: 'top',
-    distance: '75px',
-    duration: 1650,
-    reset: false
+function renderGallery() {
+  visiblePhotos = getVisiblePhotos();
+  galleryGrid.innerHTML = visiblePhotos
+    .map(
+      (photo, index) => `
+        <article
+          class="gallery-item"
+          data-index="${index}"
+          data-category="${photo.category}"
+          data-size="${photo.size}"
+          tabindex="0"
+          role="button"
+          aria-label="Open ${photo.title}"
+        >
+          <img src="${photo.src}" alt="${photo.title}" loading="lazy" />
+          <div class="gallery-overlay"><span>${photo.title}</span></div>
+        </article>
+      `
+    )
+    .join('');
+
+  galleryGrid.querySelectorAll('.gallery-item').forEach((card) => {
+    card.addEventListener('click', () => openLightbox(Number(card.dataset.index)));
+    card.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openLightbox(Number(card.dataset.index));
+      }
+    });
+  });
+}
+
+function openLightbox(index) {
+  activeLightboxIndex = index;
+  const photo = visiblePhotos[index];
+  if (!photo) return;
+
+  lightboxImage.src = photo.src;
+  lightboxImage.alt = photo.title;
+  lightboxCaption.textContent = photo.title;
+  lightbox.classList.add('is-open');
+  lightbox.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('lightbox-open');
+}
+
+function closeLightbox() {
+  lightbox.classList.remove('is-open');
+  lightbox.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('lightbox-open');
+}
+
+function showNextPhoto() {
+  if (!visiblePhotos.length) return;
+  activeLightboxIndex = (activeLightboxIndex + 1) % visiblePhotos.length;
+  const photo = visiblePhotos[activeLightboxIndex];
+  lightboxImage.src = photo.src;
+  lightboxImage.alt = photo.title;
+  lightboxCaption.textContent = photo.title;
+}
+
+function showPreviousPhoto() {
+  if (!visiblePhotos.length) return;
+  activeLightboxIndex = (activeLightboxIndex - 1 + visiblePhotos.length) % visiblePhotos.length;
+  const photo = visiblePhotos[activeLightboxIndex];
+  lightboxImage.src = photo.src;
+  lightboxImage.alt = photo.title;
+  lightboxCaption.textContent = photo.title;
+}
+
+filterButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    currentFilter = button.dataset.filter;
+    filterButtons.forEach((item) => item.classList.toggle('active', item === button));
+    renderGallery();
+  });
 });
 
-sr.reveal('.featured-name', { delay: 50 });
-sr.reveal('.featured-text-info', { delay: 50 });
-sr.reveal('.featured-text-btn', { delay: 50 });
-sr.reveal('.social-icons', { delay: 50 });
-sr.reveal('.project-box', { delay: 70 });
-sr.reveal('.service-box', { delay: 70 });
-sr.reveal('.top-header', {});
+lightboxClose.addEventListener('click', closeLightbox);
+lightboxPrev.addEventListener('click', showPreviousPhoto);
+lightboxNext.addEventListener('click', showNextPhoto);
 
-const srLeft = ScrollReveal({
-    origin: 'left',
-    distance: '80px',
-    duration: 1750,
-    reset: false
+window.addEventListener('keydown', (event) => {
+  if (!lightbox.classList.contains('is-open')) return;
+
+  if (event.key === 'Escape') {
+    closeLightbox();
+  }
+
+  if (event.key === 'ArrowRight') {
+    showNextPhoto();
+  }
+
+  if (event.key === 'ArrowLeft') {
+    showPreviousPhoto();
+  }
 });
 
-srLeft.reveal('.about-info', { delay: 60 });
-srLeft.reveal('.contact-info', { delay: 60 });
-
-const srRight = ScrollReveal({
-    origin: 'right',
-    distance: '80px',
-    duration: 1750,
-    reset: false
+lightbox.addEventListener('click', (event) => {
+  if (event.target === lightbox) {
+    closeLightbox();
+  }
 });
 
-srRight.reveal('.skills-section', { delay: 50 });
-srRight.reveal('.skills-box', { delay: 50 });
-srRight.reveal('.form', { delay: 50 });
-srRight.reveal('.profile-image', { delay: 60 });
+window.addEventListener('scroll', setHeaderState);
+window.addEventListener('load', () => {
+  setHeaderState();
+  renderGallery();
+});
 
-// ---------- CHANGE ACTIVE LINK -----------
+const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
 const sections = document.querySelectorAll('section[id]');
 
-function scrollActive() {
-    const scrollY = window.scrollY;
+function updateActiveNav() {
+  let currentSection = 'home';
 
-    sections.forEach(current => {
-        const sectionHeight = current.offsetHeight;
-        const sectionTop = current.offsetTop - 100;
-        const sectionId = current.getAttribute('id');
-
-        const navLink = document.querySelector(`.nav-link.${sectionId}`);
-        if (navLink) {
-            if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-                navLink.classList.add('active-link');
-            } else {
-                navLink.classList.remove('active-link');
-            }
-        }
-    });
-}
-
-window.addEventListener('load', scrollActive);
-window.addEventListener('scroll', scrollActive);
-
-// ---------- SCROLL TO FUNCTIONS -----------
-const easingFunctions = {
-    // Quadratic easing
-    easeInOutCubic: t => t < 0.5
-        ? 4 * t * t * t
-        : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1,
-};
-
-let currentEasingFunction = 'easeInOutCubic';
-
-function scrollToTarget(target, offset = 0, duration = 2000, easingType = currentEasingFunction) {
-    if (window.scrollAnimation) {
-        cancelAnimationFrame(window.scrollAnimation);
-        window.scrollAnimation = null;
+  sections.forEach((section) => {
+    const top = section.offsetTop - 140;
+    const bottom = top + section.offsetHeight;
+    if (window.scrollY >= top && window.scrollY < bottom) {
+      currentSection = section.getAttribute('id');
     }
+  });
 
-    const targetPosition = typeof target === 'number'
-        ? target
-        : target.getBoundingClientRect().top + window.scrollY;
-
-    const startPosition = window.scrollY;
-    const distance = targetPosition - startPosition - offset;
-
-    if (Math.abs(distance) < 3) {
-        window.scrollTo(0, targetPosition - offset);
-        return;
-    }
-
-    const startTime = performance.now();
-    const ease = easingFunctions[easingType] || easingFunctions.easeInOutCubic;
-
-    function scrollAnimation(currentTime) {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-
-        const easedProgress = ease(progress);
-        const scrollAmount = startPosition + distance * easedProgress;
-        window.scrollTo(0, scrollAmount);
-
-        if (progress < 1) {
-            window.scrollAnimation = requestAnimationFrame(scrollAnimation);
-        } else {
-            window.scrollAnimation = null;
-        }
-    }
-
-    window.scrollAnimation = requestAnimationFrame(scrollAnimation);
+  navLinks.forEach((link) => {
+    const target = link.getAttribute('href').replace('#', '');
+    link.classList.toggle('active-link', target === currentSection);
+  });
 }
 
-// -------- Section scroll functions --------
-function scrollToHome() {
-    scrollToTarget(0, 0, 2000);
-}
-
-function scrollToAbout() {
-    const aboutSection = document.getElementById('about');
-    scrollToTarget(aboutSection, 0, 2000);
-}
-
-function scrollToProjects() {
-    const projectsSection = document.getElementById('projects');
-    scrollToTarget(projectsSection, 0, 2000);
-}
-
-function scrollToContact() {
-    const contactSection = document.getElementById('contact');
-    scrollToTarget(contactSection, 0, 2000);
-}
-
-function scrollToFooter() {
-    const footerSection = document.getElementById('footer');
-    scrollToTarget(footerSection, 0, 2000);
-}
-
-//HIRE ME BUTTON
-let blueBtn = document.querySelector('.blue- btn')
-blueBtn.addEventListener('click', function(){
-    scrollToTarget(document.getElementById('contact'), 0, 200);
-})
-
-// Initialize EmailJS
-    // (function() {
- // ✅ Initialize EmailJS with your Public Key
-    // (function() {
-    //     emailjs.init("gZBrTo_lOBpeEXt_s"); // Replace with your Public Key
-    // })();
-
-    // // ✅ Form submit handler
-    // document.getElementById("contact-form").addEventListener("submit", function(event) {
-    //     event.preventDefault();
-
-    //     emailjs.sendForm("service_k8lbwkf", "template_oqkld7p", this)
-    //     .then(function(response) {
-    //         alert("✅ Message sent successfully!");
-    //         document.getElementById("contact-form").reset(); // Reset form after success
-    //     }, function(error) {
-    //         alert("❌ Failed to send message. Error: " + JSON.stringify(error));
-    //     });
-    // });
-
-emailjs.init("1XfMO-j7m_pL2HL73"); // yahan aapka Public Key
-
-document.querySelector('.form').addEventListener('submit', function(event) {
-    event.preventDefault();
-
-    emailjs.sendForm('service_ymp004l', 'template_7269hac', this)
-    .then(function() {
-        alert('Message sent successfully!');
-    }, function(error) {
-        alert('Failed to send message: ' + JSON.stringify(error));
-    });
-});
+window.addEventListener('scroll', updateActiveNav);
+window.addEventListener('load', updateActiveNav);
