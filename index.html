@@ -21,7 +21,8 @@
       referrerpolicy="no-referrer"
     />
     <link rel="stylesheet" href="style.css" />
-    <link rel="icon" href="assets/Icon.png" type="image/png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="assets/favicon.png" />
+    <link rel="apple-touch-icon" href="assets/favicon.png" />
   </head>
   <body>
     <header class="topbar" id="header">
@@ -85,7 +86,7 @@
       <section class="section featured-section">
         <div class="featured-image-wrap">
           <img
-            src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80"
+            src="assets/open-horizon.jpeg"
             alt="Featured photography scene"
           />
         </div>
@@ -101,7 +102,7 @@
 
       <section class="section about-section" id="about">
         <div class="about-photo">
-          <img src="assets/Profile.jpeg" alt="ART BY PIR portrait" />
+          <img src="assets/profile-portrait.JPG" alt="ART BY PIR portrait" />
         </div>
 
         <div class="about-copy">
@@ -124,16 +125,16 @@
 
         <div class="instagram-grid">
           <a class="insta-card" href="https://www.instagram.com/art_by_pir/" target="_blank" rel="noreferrer">
-            <img src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=900&q=80" alt="Instagram post preview" />
+              <img src="assets/soft-echo.jpeg" alt="Instagram post preview" />
           </a>
           <a class="insta-card" href="https://www.instagram.com/art_by_pir/" target="_blank" rel="noreferrer">
-            <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=900&q=80" alt="Instagram post preview" />
+              <img src="assets/golden-fields.jpeg" alt="Instagram post preview" />
           </a>
           <a class="insta-card" href="https://www.instagram.com/art_by_pir/" target="_blank" rel="noreferrer">
-            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=80" alt="Instagram post preview" />
+              <img src="assets/afterglow.jpeg" alt="Instagram post preview" />
           </a>
           <a class="insta-card" href="https://www.instagram.com/art_by_pir/" target="_blank" rel="noreferrer">
-            <img src="https://images.unsplash.com/photo-1521295121783-8a321d551ad2?auto=format&fit=crop&w=900&q=80" alt="Instagram post preview" />
+              <img src="assets/city-echo.jpeg" alt="Instagram post preview" />
           </a>
         </div>
 
@@ -149,18 +150,27 @@
             <h2>For commissions, collaborations, and prints.</h2>
             <p>Let’s create something timeless together.</p>
             <div class="contact-details">
-              <a href="mailto:ghazipir1@gmail.com">ghazipir1@gmail.com</a>
-              <a href="https://www.instagram.com/art_by_pir/" target="_blank" rel="noreferrer">Instagram</a>
+              <a class="contact-detail email-detail" href="mailto:ghazipir1@gmail.com">
+                <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                <span>ghazipir1@gmail.com</span>
+              </a>
+              <a class="contact-detail instagram-detail" href="https://www.instagram.com/art_by_pir/" target="_blank" rel="noreferrer">
+                <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+                <span>Instagram</span>
+              </a>
             </div>
           </div>
 
-          <form class="contact-form" action="https://formspree.io/f/xldwpykb" method="POST">
+          <form class="contact-form" id="contactForm" action="https://formspree.io/f/xldwpykb" method="POST">
             <div class="input-row">
               <input type="text" name="name" placeholder="Name" aria-label="Name" required />
               <input type="email" name="email" placeholder="Email" aria-label="Email" required />
             </div>
             <textarea name="message" rows="5" placeholder="Your message" aria-label="Your message" required></textarea>
-            <button type="submit" class="primary-button submit-button">Send Inquiry</button>
+            <div class="submit-row">
+              <button type="submit" class="primary-button submit-button">Send Inquiry</button>
+              <span class="form-status" id="formStatus" role="status" aria-live="polite"></span>
+            </div>
           </form>
         </div>
       </section>

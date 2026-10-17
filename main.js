@@ -1,58 +1,148 @@
 const photographs = [
   {
-    title: 'Golden Drift',
+    title: 'Golden Fields',
     category: 'nature',
     size: 'wide',
-    src: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80'
+    src: 'assets/golden-fields.jpeg'
   },
   {
-    title: 'Still Water',
+    title: 'Open Horizon',
     category: 'landscapes',
-    size: 'square',
-    src: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=900&q=80'
+    size: 'wide',
+    src: 'assets/open-horizon.jpeg'
   },
   {
-    title: 'Portrait Light',
+    title: 'Quiet Light',
     category: 'portraits',
     size: 'tall',
-    src: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=80'
+    src: 'assets/quiet-light.jpeg'
   },
   {
-    title: 'City Notes',
+    title: 'City Echo',
     category: 'street',
     size: 'square',
-    src: 'https://images.unsplash.com/photo-1521295121783-8a321d551ad2?auto=format&fit=crop&w=900&q=80'
+    src: 'assets/city-echo.jpeg'
   },
   {
     title: 'Soft Echo',
     category: 'creative',
     size: 'tall',
-    src: 'https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=900&q=80'
+    src: 'assets/soft-echo.jpeg'
   },
   {
-    title: 'Morning Grain',
-    category: 'nature',
-    size: 'square',
-    src: 'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=900&q=80'
-  },
-  {
-    title: 'Open Road',
+    title: 'Stone Path',
     category: 'landscapes',
     size: 'wide',
-    src: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80'
+    src: 'assets/soft-light-detail.jpeg'
   },
   {
-    title: 'Frames in Motion',
+    title: 'Daydream',
     category: 'creative',
     size: 'square',
-    src: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80'
+    src: 'assets/daydream.jpeg'
   },
   {
     title: 'Afterglow',
     category: 'portraits',
     size: 'square',
-    src: 'https://images.unsplash.com/photo-1521119989659-a83eee488004?auto=format&fit=crop&w=900&q=80'
-  }
+    src: 'assets/afterglow.jpeg'
+  },
+  {
+    title: 'Wild Silence',
+    category: 'nature',
+    size: 'wide',
+    src: 'assets/quiet-afternoon.jpeg'
+  },
+  {
+    title: 'Golden Memory',
+    category: 'portraits',
+    size: 'tall',
+    src: 'assets/golden-memory.jpeg'
+  },
+  {
+    title: 'Velvet Shade',
+    category: 'creative',
+    size: 'square',
+    src: 'assets/velvet-shade.jpg'
+  },
+  {
+    title: 'Cinematic Frame',
+    category: 'street',
+    size: 'tall',
+    src: 'assets/cinematic-frame.jpeg'
+  },
+  {
+    title: 'Morning Calm',
+    category: 'landscapes',
+    size: 'wide',
+    src: 'assets/morning-calm.jpeg'
+  },
+  {
+    title: 'The Long Walk',
+    category: 'landscapes',
+    size: 'square',
+    src: 'assets/long-walk.jpg'
+  },
+  {
+    title: 'Sunset Line',
+    category: 'creative',
+    size: 'wide',
+    src: 'assets/sunset-line.jpg'
+  },
+  {
+    title: 'Moon in Stillness',
+    category: 'nature',
+    size: 'square',
+    src: 'assets/moon-in-stillness.jpeg'
+  },
+  {
+    title: 'Lunar Edge',
+    category: 'creative',
+    size: 'tall',
+    src: 'assets/lunar-edge.jpeg'
+  },
+  {
+    title: 'Egret in the Green',
+    category: 'nature',
+    size: 'tall',
+    src: 'assets/egret-in-the-green.jpeg'
+  },
+  {
+    title: 'Road to Dusk',
+    category: 'landscapes',
+    size: 'wide',
+    src: 'assets/road-to-dusk.jpeg'
+  },
+  {
+    title: 'Petal in Shadow',
+    category: 'creative',
+    size: 'square',
+    src: 'assets/petal-in-shadow.jpeg'
+  },
+  {
+    title: 'Nocturne Bloom',
+    category: 'creative',
+    size: 'square',
+    src: 'assets/nocturne-bloom.jpeg'
+  },
+  {
+    title: 'Golden Petal',
+    category: 'creative',
+    size: 'square',
+    src: 'assets/golden-petal.jpeg'
+  },
+  {
+    title: 'Dusk Reflection',
+    category: 'landscapes',
+    size: 'wide',
+    src: 'assets/dusk-reflection.jpg'
+  },
+  {
+    title: 'Moonlit Bloom',
+    category: 'creative',
+    size: 'square',
+    src: 'assets/moonlit-bloom.jpeg'
+  },
 ];
 
 const nav = document.getElementById('navMenu');
@@ -67,6 +157,8 @@ const lightboxClose = document.getElementById('lightboxClose');
 const lightboxPrev = document.getElementById('lightboxPrev');
 const lightboxNext = document.getElementById('lightboxNext');
 const yearNode = document.getElementById('year');
+const contactForm = document.getElementById('contactForm');
+const formStatus = document.getElementById('formStatus');
 
 let currentFilter = 'all';
 let visiblePhotos = [...photographs];
@@ -206,6 +298,37 @@ window.addEventListener('keydown', (event) => {
 lightbox.addEventListener('click', (event) => {
   if (event.target === lightbox) {
     closeLightbox();
+  }
+});
+
+contactForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+
+  const submitButton = contactForm.querySelector('.submit-button');
+  submitButton.disabled = true;
+  formStatus.className = 'form-status';
+  formStatus.textContent = 'Sending…';
+
+  try {
+    const response = await fetch(contactForm.action, {
+      method: 'POST',
+      body: new FormData(contactForm),
+      headers: { Accept: 'application/json' }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Form submission failed with status ${response.status}.`);
+    }
+
+    formStatus.classList.add('is-success');
+    formStatus.textContent = 'Message sent successfully.';
+    contactForm.reset();
+  } catch (error) {
+    console.error('Contact form submission failed:', error);
+    formStatus.classList.add('is-error');
+    formStatus.textContent = 'Could not send your message. Please try again.';
+  } finally {
+    submitButton.disabled = false;
   }
 });
 
