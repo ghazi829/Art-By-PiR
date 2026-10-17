@@ -1,5 +1,35 @@
 const photographs = [
   {
+    title: 'Heaven Breaks',
+    category: 'landscapes',
+    size: 'wide',
+    src: 'assets/heaven-breaks.jpeg'
+  },
+  {
+    title: 'Whisper in Dark',
+    category: 'nature',
+    size: 'square',
+    src: 'assets/whisper-in-dark.jpeg'
+  },
+  {
+    title: 'Storm Fracture',
+    category: 'creative',
+    size: 'wide',
+    src: 'assets/storm-fracture.jpeg'
+  },
+  {
+    title: 'Path Less Taken',
+    category: 'nature',
+    size: 'tall',
+    src: 'assets/path-less-taken.jpeg'
+  },
+  {
+    title: 'Before the Storm',
+    category: 'landscapes',
+    size: 'tall',
+    src: 'assets/before-the-storm.jpeg'
+  },
+  {
     title: 'Golden Fields',
     category: 'nature',
     size: 'wide',
@@ -187,9 +217,36 @@ function closeMenu() {
   navToggle.setAttribute('aria-expanded', 'false');
 }
 
-navToggle.addEventListener('click', toggleMenu);
+navToggle.addEventListener('click', (e) => {
+  e.stopPropagation();
+  toggleMenu();
+});
+
 nav.querySelectorAll('.nav-link').forEach((link) => {
   link.addEventListener('click', () => closeMenu());
+});
+
+const brandMark = document.querySelector('.brand-mark');
+if (brandMark) {
+  brandMark.addEventListener('click', () => closeMenu());
+}
+
+document.addEventListener('click', (event) => {
+  if (nav.classList.contains('is-open') && !nav.contains(event.target) && !navToggle.contains(event.target)) {
+    closeMenu();
+  }
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && nav.classList.contains('is-open')) {
+    closeMenu();
+  }
+});
+
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 960 && nav.classList.contains('is-open')) {
+    closeMenu();
+  }
 });
 
 function getVisiblePhotos() {
